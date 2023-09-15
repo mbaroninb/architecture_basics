@@ -26,6 +26,12 @@ class LoginFragment : Fragment() {
     * */
     private val viewModel by viewModels<LoginViewModel>()
 
+    /*
+    * FragmentLoginBinding es una clase de vinculación autogenerada que contiene
+    * referencias directas al XML de este fragmento.
+    *
+    * Ver documentacion en README.
+    * */
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
@@ -33,6 +39,7 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        //Inflo la vista y retorno la raiz de esa vista (xml)
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -40,6 +47,10 @@ class LoginFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        /*
+        * En el metododo setOnClickListener del boton de login, obtengo de la UI los datos
+        * ingresados por el usuario y se los paso al viewmodel llamando a la funcion logIn.
+        * */
         binding.btnLogin.setOnClickListener {
             val userText = binding.txtInputUser.editText?.text.toString()
             val passText = binding.textInputPassword.editText?.text.toString()
@@ -47,15 +58,36 @@ class LoginFragment : Fragment() {
             viewModel.logIn(userText, passText)
         }
 
-        viewModel.loginFailedMessage.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { message ->
+        /*
+        * Declaro un observador a la propiedad loginFailedMessage del viewModel.(Ver LoginViewModel)
+        *
+        * Cuando llamo a la funcion observe le paso como parametro viewLifecycleOwner
+        * que representa el ciclo de vida del fragmento para que deje de observar cuando el
+        * ciclo de vida muera.
+        *
+        * Como el tipo de datos alojado dentro del Livedata es un Event<String>
+        * (Ver clase Event dentro de helpers), lo primero que hago es verificar que no lo mostre
+        * antes, y luego tomo el mensaje (String) y lo muestro en el toast.
+        * */
+        viewModel.loginFailedMessage.observe(viewLifecycleOwner) { event ->
+            event.getContentIfNotHandled()?.let { message ->
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
             }
         }
 
+        /*
+        * Mismo proceso que en loginFailedMessage.
+        *
+        * Cuando el login sea correcto se ejecuta el contenido en la funcion lambda let().
+        * */
         viewModel.loginSuccess.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { permission ->
                 if (permission) {
+                    /*
+                    * Aqui se obtiene el navController declarado en la MainActivity y luego
+                    * se ejecuta la accion de navegacion hacia el DashFragment. Este destino esta
+                    * declarado en el grafo de navegacion (nav_graph.xml).
+                    * */
                     findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToDashboardFragment())
                 }
             }

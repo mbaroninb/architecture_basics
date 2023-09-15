@@ -14,8 +14,13 @@ import com.android.example.architecture_basics.ui.adapters.PhotoGridAdapter
 import com.android.example.architecture_basics.ui.viewmodels.DashboardViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
+@AndroidEntryPoint //Etiqueta de Dagger Hilt
 class DashboardFragment : Fragment() {
+
+    /*
+    * Al igual que en el LoginFragment instancio el viewmodel correspondiente
+    * y declaro el viewBinding.
+    * */
 
     private val viewModel by viewModels<DashboardViewModel>()
 
@@ -26,8 +31,6 @@ class DashboardFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        Log.d("rendimiento","onCreateView DashFragment")
-
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -35,16 +38,27 @@ class DashboardFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Creo el adapter y se lo asigno al RecyclerView que contiene las imagenes.
         val photoAdapter = PhotoGridAdapter()
+        binding.rvPhotosGrid.adapter = photoAdapter
 
-        binding.photosGrid.adapter = photoAdapter
-
-        viewModel.photos.observe(viewLifecycleOwner) { listPhotos->
-            listPhotos.let { photo ->
-                photoAdapter.submitList(photo)
+        /*
+        * Mismo mecanismo que en LoginFragment.
+        *
+        * En este caso el objeto contenido en el livedata es una lista de MarsPhotos.
+        * Cuando el valor dentro del livedata cambie, la UI va a actualizar el adapter del Recyler.
+        * */
+        viewModel.photos.observe(viewLifecycleOwner) { listMarsPhoto ->
+            listMarsPhoto.let {
+                photoAdapter.submitList(it)
             }
         }
 
+        /*
+        * Este observador va a ir mostrando los cambios de estado de la peticion de red a medida
+        * que la propiedad status del viewmodel cambie.
+        * Esta propiedad status es un enumerable.
+        * */
         viewModel.status.observe(viewLifecycleOwner) { status ->
             when (status) {
                 MarsApiStatus.LOADING -> {
@@ -66,16 +80,8 @@ class DashboardFragment : Fragment() {
     }
 
     override fun onDestroyView() {
-
-        Log.d("rendimiento","onDestroyView DashFragment")
-
         super.onDestroyView()
         _binding = null
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        Log.d("rendimiento","onDestroy DashFragment")
-
-    }
 }
