@@ -11,12 +11,12 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragment" />
+            android:id="@+id/action_loginFragment_to_beersFragment"
+            app:destination="@id/beersFragment" />
     </fragment>
     <fragment
-        android:id="@+id/dashboardFragment"
-        android:name="com.android.example.architecture_basics.ui.views.DashboardFragment"
-        android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/beersFragment"
+        android:name="com.android.example.architecture_basics.ui.views.BeersFragment"
+        android:label="fragment_beers"
+        tools:layout="@layout/fragment_beers" />
 </navigation>

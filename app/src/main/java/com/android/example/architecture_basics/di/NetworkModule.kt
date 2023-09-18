@@ -1,6 +1,6 @@
 package com.android.example.architecture_basics.di
 
-import com.android.example.architecture_basics.data.network.MarsApiService
+import com.android.example.architecture_basics.data.network.BeersApiService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,7 +27,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
-    private const val BASE_URL = "https://android-kotlin-fun-mars-server.appspot.com/"
+    private const val BASE_URL = "https://api.punkapi.com/v2/"
 
     /*
     * @Provide indica a Hilt cómo proporcionar una instancia mediante una función dentro del módulo,
@@ -49,7 +49,7 @@ object NetworkModule {
     * */
     @Singleton
     @Provides
-    fun provideApiService(retrofit: Retrofit): MarsApiService = retrofit.create(MarsApiService::class.java)
+    fun provideApiService(retrofit: Retrofit): BeersApiService = retrofit.create(BeersApiService::class.java)
 
 }
 

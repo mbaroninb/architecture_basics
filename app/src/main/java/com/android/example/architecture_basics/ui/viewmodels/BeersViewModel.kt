@@ -1,13 +1,13 @@
 package com.android.example.architecture_basics.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.example.architecture_basics.data.network.MarsApiService
-import com.android.example.architecture_basics.data.network.models.MarsPhoto
-import com.android.example.architecture_basics.helpers.MarsApiStatus
-import dagger.hilt.android.AndroidEntryPoint
+import com.android.example.architecture_basics.data.network.BeersApiService
+import com.android.example.architecture_basics.data.network.models.BeerApi
+import com.android.example.architecture_basics.helpers.BeersApiStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -19,28 +19,27 @@ import javax.inject.Inject
 * Dentro de @Inject contructor() Hilt debe injectar MarsApiService. (Ver NetworkModule)
 * */
 @HiltViewModel
-class DashboardViewModel
-@Inject constructor(private val marsApiService: MarsApiService) : ViewModel() {
+class BeersViewModel @Inject constructor(private val beersApiService: BeersApiService) : ViewModel(){
 
     //Estado de la peticion de red
-    private val _status = MutableLiveData<MarsApiStatus>()
-    val status: LiveData<MarsApiStatus> = _status
+    private val _status = MutableLiveData<BeersApiStatus>()
+    val status: LiveData<BeersApiStatus> = _status
 
-    //Listado de imagenes a mostrar en la UI.
-    private val _photos = MutableLiveData<List<MarsPhoto>>()
-    val photos: LiveData<List<MarsPhoto>> = _photos
+    //Listado de beers a mostrar en la UI.
+    private val _beers = MutableLiveData<List<BeerApi>>()
+    val beers: LiveData<List<BeerApi>> = _beers
 
     /*
     * Este bloque init se va a ejecutar cuando el viewmodel se instancie por primera vez.
     * */
     init {
-        getMarsPhotos()
+        getBeers()
     }
 
     /*
-    * Esta funcion trae las imagenes desde un servicio web marsApiService (retrofit)
+    * Esta funcion trae las imagenes desde un servicio web punkApi (retrofit)
     * */
-    private fun getMarsPhotos() {
+    private fun getBeers() {
 
         /*
         * Como la consulta de red es un proceso costoso en tiempos, esto se realiza en una
@@ -53,17 +52,17 @@ class DashboardViewModel
         * Ver comentarios al final del documento.
         * */
         viewModelScope.launch {
-            _status.value = MarsApiStatus.LOADING
+            _status.value = BeersApiStatus.LOADING
             try {
-                _photos.value = marsApiService.getPhotos()
-                _status.value = MarsApiStatus.DONE
+                _beers.value = beersApiService.getBeers()
+                _status.value = BeersApiStatus.DONE
             } catch (e: Exception) {
-                _status.value = MarsApiStatus.ERROR
-                _photos.value = listOf()
+                Log.d("pruebas","$e")
+                _status.value = BeersApiStatus.ERROR
+                _beers.value = listOf()
             }
         }
     }
-
 }
 
 /*
@@ -79,7 +78,7 @@ class DashboardViewModel
 * bloque de la siguiente manera:
 *
    viewmodelScope.launch(Dispatchers.IO) {
-        TODO("Heavy work")
+        TO_DO("Heavy work")
     }
 *
 * */
