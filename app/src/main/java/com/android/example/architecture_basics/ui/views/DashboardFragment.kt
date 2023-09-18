@@ -14,7 +14,7 @@ import com.android.example.architecture_basics.ui.adapters.PhotoGridAdapter
 import com.android.example.architecture_basics.ui.viewmodels.DashboardViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint //Etiqueta de Dagger Hilt
+@AndroidEntryPoint //Etiqueta Hilt (ver DaggerHilt Docs en README.)
 class DashboardFragment : Fragment() {
 
     /*

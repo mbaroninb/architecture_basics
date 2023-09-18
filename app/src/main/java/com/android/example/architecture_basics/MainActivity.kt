@@ -7,7 +7,10 @@ import androidx.navigation.fragment.NavHostFragment
 import com.android.example.architecture_basics.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint //Etiqueta de Dagger Hilt
+/*
+* @AndroidEntryPoint indica a Hilt que puede proporcionar dependencias en esta clase.
+* */
+@AndroidEntryPoint //Etiqueta Hilt (ver DaggerHilt Docs en README.)
 class MainActivity : AppCompatActivity() {
 
     //(ViewBinding) Ver documentacion en README.

@@ -1,8 +1,9 @@
 
 ## Documentacion
 Adjunto documentacion oficial y algunos tutoriales por separado de cada uno de los componentes mas usados.\
-Aun asi les dejo un curso muy completo gratuito de la pagina oficial de android sobre [Kotlin Fundamentals](https://developer.android.com/courses/android-basics-kotlin/course) que tiene toda esta informacion.
-
+Aun asi les dejo un curso muy completo gratuito de la pagina oficial de android sobre 
+[Kotlin Fundamentals](https://developer.android.com/courses/android-basics-kotlin/course) que tiene 
+toda esta informacion.
 
 ### Componentes de arquitectura
 #### ViewModel
@@ -19,3 +20,8 @@ Aun asi les dejo un curso muy completo gratuito de la pagina oficial de android 
 #### Coroutines
 - [Coroutines - Docs ](https://developer.android.com/kotlin/coroutines?hl=es-419)
 - [Coroutines - CodeLab ](https://developer.android.com/courses/pathways/android-basics-kotlin-unit-4-pathway-1)
+- [Coroutines - Articulo](https://medium.com/androiddevelopers/coroutines-on-android-part-i-getting-the-background-3e0e54d20bb)
+
+#### Dagger Hilt
+- [Dagger Hilt - Docs ](https://developer.android.com/training/dependency-injection/hilt-android?hl=es-419)
+- [Dagger Hilt - Tutorial ](https://www.youtube.com/watch?v=t6ZuzSu2UHI&t=3s&ab_channel=Programaci%C3%B3nAndroidbyAristiDevs)
