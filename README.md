@@ -1,3 +1,8 @@
+# architecture_basics
+Conceptos basicos de Kotlin - Architecture Components &amp; Otros
+
+En esta app simple, simulo un login de usuario y en otra pantalla cargo una lista de imagenes del 
+planeta Marte obtenidas de una API-REST gratuita.
 
 ## Documentacion
 Adjunto documentacion oficial y algunos tutoriales por separado de cada uno de los componentes mas usados.\
