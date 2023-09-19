@@ -18,5 +18,19 @@
         android:id="@+id/beersFragment"
         android:name="com.android.example.architecture_basics.ui.views.BeersFragment"
         android:label="fragment_beers"
-        tools:layout="@layout/fragment_beers" />
+        tools:layout="@layout/fragment_beers" >
+        <action
+            android:id="@+id/action_beersFragment_to_detailsBeerFragment"
+            app:destination="@id/detailsBeerFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/detailsBeerFragment"
+        android:name="com.android.example.architecture_basics.ui.views.DetailsBeerFragment"
+        android:label="fragment_details_beer"
+        tools:layout="@layout/fragment_details_beer" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+    </fragment>
 </navigation>

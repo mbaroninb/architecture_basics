@@ -11,7 +11,9 @@ import com.android.example.architecture_basics.R
 import com.android.example.architecture_basics.data.network.models.BeerApi
 import com.android.example.architecture_basics.databinding.RowBeerItemBinding
 
-class BeersAdapter: ListAdapter<BeerApi, BeersAdapter.BeerViewHolder>(DiffCallback) {
+class BeersAdapter(
+    private val onItemClicked: (BeerApi) -> Unit
+): ListAdapter<BeerApi, BeersAdapter.BeerViewHolder>(DiffCallback) {
 
     class BeerViewHolder(private var binding: RowBeerItemBinding): RecyclerView.ViewHolder(binding.root) {
         fun bind(beer: BeerApi) {
@@ -53,7 +55,7 @@ class BeersAdapter: ListAdapter<BeerApi, BeersAdapter.BeerViewHolder>(DiffCallba
         )
         viewHolder.itemView.setOnClickListener {
             val position = viewHolder.adapterPosition
-            //onItemClicked(getItem(position))
+            onItemClicked(getItem(position))
         }
         return viewHolder
     }

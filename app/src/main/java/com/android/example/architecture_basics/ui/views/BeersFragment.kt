@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.android.example.architecture_basics.R
 import com.android.example.architecture_basics.databinding.FragmentBeersBinding
 import com.android.example.architecture_basics.helpers.BeersApiStatus
@@ -22,7 +23,7 @@ class BeersFragment : Fragment() {
     * */
     private val viewModel by viewModels<BeersViewModel>()
 
-    private var _binding : FragmentBeersBinding? = null
+    private var _binding: FragmentBeersBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +37,22 @@ class BeersFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         // Creo el adapter y se lo asigno al RecyclerView.
-        val beersAdapter = BeersAdapter()
+        val beersAdapter = BeersAdapter {
+            /*
+            * Beers Adapter toma un parámetro: onItemClicked().
+            * Esta función se utilizará para controlar la navegación cuando se seleccione
+            * un elemento.
+            *
+            * En este bloque {} definimos que va a hacer la funcion.
+            * Por su parte en el adapter, en onCreateViewHolder(), configuramos un onClickListener()
+            * para llamar a esta funcion  pasandole el elemento que se clickeo
+            * */
+            val action = BeersFragmentDirections
+                .actionBeersFragmentToDetailsBeerFragment(id = it.id!!)
+
+            view.findNavController().navigate(action)
+        }
+
         binding.rvBeers.adapter = beersAdapter
 
         /*

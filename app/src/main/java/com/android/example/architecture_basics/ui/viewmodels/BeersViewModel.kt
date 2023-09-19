@@ -57,7 +57,6 @@ class BeersViewModel @Inject constructor(private val beersApiService: BeersApiSe
                 _beers.value = beersApiService.getBeers()
                 _status.value = BeersApiStatus.DONE
             } catch (e: Exception) {
-                Log.d("pruebas","$e")
                 _status.value = BeersApiStatus.ERROR
                 _beers.value = listOf()
             }
