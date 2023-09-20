@@ -13,3 +13,4 @@ data class BeerApi(
     @SerializedName("abv") var abv: Double? = null,
     @SerializedName("ibu") var ibu: Double? = null,
 )
+

@@ -1,19 +1,19 @@
 package com.android.example.architecture_basics.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.example.architecture_basics.data.network.BeersApiService
 import com.android.example.architecture_basics.data.network.models.BeerApi
+import com.android.example.architecture_basics.domain.Repository
 import com.android.example.architecture_basics.helpers.BeersApiStatus
+import com.android.example.architecture_basics.helpers.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class DetailsBeerViewModel @Inject constructor(private val beersApiService: BeersApiService) :
+class DetailsBeerViewModel @Inject constructor(private val repository: Repository) :
     ViewModel() {
 
     //Estado de la peticion de red
@@ -29,11 +29,32 @@ class DetailsBeerViewModel @Inject constructor(private val beersApiService: Beer
         viewModelScope.launch {
             _status.value = BeersApiStatus.LOADING
             try {
-                beersApiService.getBeerById(id)[0].also { _beer.value = it }
+                _beer.value = repository.fetchApiBeerById(id)
                 _status.value = BeersApiStatus.DONE
             } catch (e: Exception) {
                 _status.value = BeersApiStatus.ERROR
                 _beer.value = BeerApi()
+            }
+        }
+    }
+
+
+    //Mensaje de favorito
+    private val _favouriteMessage = MutableLiveData<Event<String>>()
+    val favouriteMessage: LiveData<Event<String>> = _favouriteMessage
+
+    fun saveFavourite() {
+        viewModelScope.launch {
+            try {
+                _favouriteMessage.value = if (repository.saveFavourite(beer.value!!) == 1L) {
+                    Event("Agregado a favoritos")
+                } else {
+                    Event("No se agrego a favoritos")
+                }
+
+
+            } catch (e: Exception) {
+                _favouriteMessage.value = Event("Falló -> ${e.message}")
             }
         }
     }

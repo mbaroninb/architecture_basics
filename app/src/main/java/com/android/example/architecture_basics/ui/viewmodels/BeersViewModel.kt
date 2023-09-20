@@ -1,12 +1,11 @@
 package com.android.example.architecture_basics.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.example.architecture_basics.data.network.BeersApiService
 import com.android.example.architecture_basics.data.network.models.BeerApi
+import com.android.example.architecture_basics.domain.Repository
 import com.android.example.architecture_basics.helpers.BeersApiStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,10 +15,10 @@ import javax.inject.Inject
 * Preparamos el viewModel para la inyección de dependencias añadiendo la etiqueta @HiltViewModel
 * y poniendo @Inject contructor() después del nombre de la clase.
 *
-* Dentro de @Inject contructor() Hilt debe injectar MarsApiService. (Ver NetworkModule)
+* Dentro de @Inject contructor() Hilt debe injectar el Repo. (Ver Repository)
 * */
 @HiltViewModel
-class BeersViewModel @Inject constructor(private val beersApiService: BeersApiService) : ViewModel(){
+class BeersViewModel @Inject constructor(private val repository: Repository) : ViewModel(){
 
     //Estado de la peticion de red
     private val _status = MutableLiveData<BeersApiStatus>()
@@ -37,7 +36,7 @@ class BeersViewModel @Inject constructor(private val beersApiService: BeersApiSe
     }
 
     /*
-    * Esta funcion trae las imagenes desde un servicio web punkApi (retrofit)
+    * Esta funcion trae las imagenes desde el repositorio.
     * */
     private fun getBeers() {
 
@@ -54,7 +53,7 @@ class BeersViewModel @Inject constructor(private val beersApiService: BeersApiSe
         viewModelScope.launch {
             _status.value = BeersApiStatus.LOADING
             try {
-                _beers.value = beersApiService.getBeers()
+                _beers.value = repository.fetchApiBeers()
                 _status.value = BeersApiStatus.DONE
             } catch (e: Exception) {
                 _status.value = BeersApiStatus.ERROR

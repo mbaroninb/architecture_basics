@@ -51,6 +51,7 @@ object NetworkModule {
     @Provides
     fun provideApiService(retrofit: Retrofit): BeersApiService = retrofit.create(BeersApiService::class.java)
 
+
 }
 
 

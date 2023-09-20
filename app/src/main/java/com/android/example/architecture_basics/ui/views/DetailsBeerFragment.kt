@@ -77,10 +77,14 @@ class DetailsBeerFragment : Fragment() {
         }
 
         binding.btnFav.setOnClickListener{
-
-            Toast.makeText(requireContext(),"Favorito",Toast.LENGTH_SHORT).show()
+            viewModel.saveFavourite()
         }
 
+        viewModel.favouriteMessage.observe(viewLifecycleOwner) {
+            it.getContentIfNotHandled()?.let { message ->
+                Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
 }

@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.android.example.architecture_basics.R
 import com.android.example.architecture_basics.databinding.FragmentBeersBinding
 import com.android.example.architecture_basics.helpers.BeersApiStatus
@@ -35,6 +38,22 @@ class BeersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        //Configuro la toolbar para que trabaje con Navigation Components.
+        val toolbar = binding.toolbar
+        val navHostFragment = NavHostFragment.findNavController(this)
+        NavigationUI.setupWithNavController(toolbar, navHostFragment)
+
+        binding.toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.action_parameters -> {
+                    findNavController().navigate(BeersFragmentDirections.actionBeersFragmentToSettingsFragment())
+                    true
+                }
+                else -> false
+            }
+        }
+
 
         // Creo el adapter y se lo asigno al RecyclerView.
         val beersAdapter = BeersAdapter {
