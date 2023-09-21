@@ -7,30 +7,39 @@
     tools:context=".ui.views.LoginFragment"
     android:background="?attr/colorPrimaryContainer">
 
-    <TextView
-        android:id="@+id/tv_login"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/GH40"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/login"
-        android:textSize="24sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/txt_input_user"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.45" />
+
+    <ImageView
+        android:id="@+id/img_beer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/beer_svgrepo_com"
+        app:layout_constraintBottom_toTopOf="@id/GH40"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintVertical_chainStyle="packed"
-        />
+        tools:ignore="ContentDescription" />
+
+
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txt_input_user"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/usuario"
-        app:layout_constraintTop_toBottomOf="@id/tv_login"
+        app:layout_constraintTop_toBottomOf="@id/GH40"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingHorizontal="40dp"
         app:layout_constraintBottom_toTopOf="@id/text_input_password"
         android:paddingVertical="10dp"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintVertical_bias="0.1"
         >
 
         <com.google.android.material.textfield.TextInputEditText
@@ -44,7 +53,7 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/text_input_password"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/password"
         app:layout_constraintTop_toBottomOf="@id/txt_input_user"
@@ -53,7 +62,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         android:paddingHorizontal="40dp"
         app:endIconMode="password_toggle">
-    >
+
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
@@ -69,11 +78,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/login"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/text_input_password"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_bias="0.8"
+        app:layout_constraintVertical_bias="0.3"
         />
 
 

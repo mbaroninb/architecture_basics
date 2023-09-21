@@ -6,6 +6,7 @@ plugins {
     //kotlin("kapt")
     id ("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 
 }
 
@@ -84,9 +85,19 @@ dependencies {
 
     //Coil
     implementation("io.coil-kt:coil:2.4.0")
+
+    //ROOM
+    implementation ("androidx.room:room-runtime:2.4.2")
+    //kapt("androidx.room:room-compiler:2.4.2")
+    ksp("androidx.room:room-compiler:2.4.2")
+
+    implementation ("androidx.room:room-ktx:2.4.2")
+
 }
 
+/*
 // Allow references to generated code
 kapt {
     correctErrorTypes = true
 }
+*/

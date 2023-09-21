@@ -85,10 +85,10 @@ class LoginFragment : Fragment() {
                 if (permission) {
                     /*
                     * Aqui se obtiene el navController declarado en la MainActivity y luego
-                    * se ejecuta la accion de navegacion hacia el DashFragment. Este destino esta
+                    * se ejecuta la accion de navegacion hacia el BeersFragment. Este destino esta
                     * declarado en el grafo de navegacion (nav_graph.xml).
                     * */
-                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToDashboardFragment())
+                    findNavController().navigate(LoginFragmentDirections.actionLoginFragmentToBeersFragment())
                 }
             }
         }

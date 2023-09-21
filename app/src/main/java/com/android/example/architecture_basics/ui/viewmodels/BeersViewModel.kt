@@ -4,10 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.android.example.architecture_basics.data.network.MarsApiService
-import com.android.example.architecture_basics.data.network.models.MarsPhoto
-import com.android.example.architecture_basics.helpers.MarsApiStatus
-import dagger.hilt.android.AndroidEntryPoint
+import com.android.example.architecture_basics.data.network.models.BeerApi
+import com.android.example.architecture_basics.domain.Repository
+import com.android.example.architecture_basics.helpers.BeersApiStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,31 +15,31 @@ import javax.inject.Inject
 * Preparamos el viewModel para la inyección de dependencias añadiendo la etiqueta @HiltViewModel
 * y poniendo @Inject contructor() después del nombre de la clase.
 *
-* Dentro de @Inject contructor() Hilt debe injectar MarsApiService. (Ver NetworkModule)
+* Dentro de @Inject contructor() Hilt debe injectar el Repo. (Ver Repository)
 * */
 @HiltViewModel
-class DashboardViewModel
-@Inject constructor(private val marsApiService: MarsApiService) : ViewModel() {
+class BeersViewModel @Inject constructor(private val repository: Repository) : ViewModel(){
 
     //Estado de la peticion de red
-    private val _status = MutableLiveData<MarsApiStatus>()
-    val status: LiveData<MarsApiStatus> = _status
+    private val _status = MutableLiveData<BeersApiStatus>()
+    val status: LiveData<BeersApiStatus> = _status
 
-    //Listado de imagenes a mostrar en la UI.
-    private val _photos = MutableLiveData<List<MarsPhoto>>()
-    val photos: LiveData<List<MarsPhoto>> = _photos
+    //Listado de beers a mostrar en la UI.
+    private val _beers = MutableLiveData<List<BeerApi>>()
+    val beers: LiveData<List<BeerApi>> = _beers
 
     /*
     * Este bloque init se va a ejecutar cuando el viewmodel se instancie por primera vez.
     * */
     init {
-        getMarsPhotos()
+        getBeers()
     }
 
     /*
-    * Esta funcion trae las imagenes desde un servicio web marsApiService (retrofit)
+    * Esta funcion trae las beers desde el repositorio. Como parametro indicamos si quiere las
+    * favoritas o no.
     * */
-    private fun getMarsPhotos() {
+    fun getBeers( favourites:Boolean = false) {
 
         /*
         * Como la consulta de red es un proceso costoso en tiempos, esto se realiza en una
@@ -53,17 +52,16 @@ class DashboardViewModel
         * Ver comentarios al final del documento.
         * */
         viewModelScope.launch {
-            _status.value = MarsApiStatus.LOADING
+            _status.value = BeersApiStatus.LOADING
             try {
-                _photos.value = marsApiService.getPhotos()
-                _status.value = MarsApiStatus.DONE
+                _beers.value = repository.fetchBeers(favourites)
+                _status.value = BeersApiStatus.DONE
             } catch (e: Exception) {
-                _status.value = MarsApiStatus.ERROR
-                _photos.value = listOf()
+                _status.value = BeersApiStatus.ERROR
+                _beers.value = listOf()
             }
         }
     }
-
 }
 
 /*
@@ -79,7 +77,7 @@ class DashboardViewModel
 * bloque de la siguiente manera:
 *
    viewmodelScope.launch(Dispatchers.IO) {
-        TODO("Heavy work")
+        TO_DO("Heavy work")
     }
 *
 * */

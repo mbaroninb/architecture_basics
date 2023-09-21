@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/beersFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -11,12 +11,38 @@
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
-            android:id="@+id/action_loginFragment_to_dashboardFragment"
-            app:destination="@id/dashboardFragment" />
+            android:id="@+id/action_loginFragment_to_beersFragment"
+            app:destination="@id/beersFragment" />
     </fragment>
     <fragment
-        android:id="@+id/dashboardFragment"
-        android:name="com.android.example.architecture_basics.ui.views.DashboardFragment"
-        android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/beersFragment"
+        android:name="com.android.example.architecture_basics.ui.views.BeersFragment"
+        android:label="Beers"
+        tools:layout="@layout/fragment_beers">
+        <action
+            android:id="@+id/action_beersFragment_to_detailsBeerFragment"
+            app:destination="@id/detailsBeerFragment" />
+        <action
+            android:id="@+id/action_beersFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/detailsBeerFragment"
+        android:name="com.android.example.architecture_basics.ui.views.DetailsBeerFragment"
+        android:label="fragment_details_beer"
+        tools:layout="@layout/fragment_details_beer" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <argument
+            android:name="isFavorite"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.android.example.architecture_basics.ui.views.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>
