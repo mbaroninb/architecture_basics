@@ -15,13 +15,10 @@ class SettingsFragment : Fragment() {
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -31,7 +28,7 @@ class SettingsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.btnExportDb.setOnClickListener{
-            Toast.makeText(requireContext(),"Exportar db aqui!",Toast.LENGTH_SHORT)
+            Toast.makeText(requireContext(),"Exportar db aqui!",Toast.LENGTH_SHORT).show()
         }
     }
 
