@@ -11,10 +11,8 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.navArgs
 import coil.load
 import com.android.example.architecture_basics.R
-import com.android.example.architecture_basics.databinding.FragmentBeersBinding
 import com.android.example.architecture_basics.databinding.FragmentDetailsBeerBinding
 import com.android.example.architecture_basics.helpers.BeersApiStatus
-import com.android.example.architecture_basics.ui.viewmodels.BeersViewModel
 import com.android.example.architecture_basics.ui.viewmodels.DetailsBeerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -38,7 +36,8 @@ class DetailsBeerFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        viewModel.getBeerById(args.id)
+        viewModel.getBeerById(args.id, args.isFavorite)
+
 
         viewModel.beer.observe(viewLifecycleOwner){
             it.let {

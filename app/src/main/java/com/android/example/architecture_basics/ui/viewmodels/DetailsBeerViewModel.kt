@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.android.example.architecture_basics.data.network.models.BeerApi
+import com.android.example.architecture_basics.data.network.models.toApi
 import com.android.example.architecture_basics.domain.Repository
 import com.android.example.architecture_basics.helpers.BeersApiStatus
 import com.android.example.architecture_basics.helpers.Event
@@ -25,11 +26,11 @@ class DetailsBeerViewModel @Inject constructor(private val repository: Repositor
     val beer: LiveData<BeerApi> = _beer
 
 
-    fun getBeerById(id: Int) {
+    fun getBeerById(id: Int, isFavourite: Boolean) {
         viewModelScope.launch {
             _status.value = BeersApiStatus.LOADING
             try {
-                _beer.value = repository.fetchApiBeerById(id)
+                _beer.value = repository.fetchBeerById(id, isFavourite)
                 _status.value = BeersApiStatus.DONE
             } catch (e: Exception) {
                 _status.value = BeersApiStatus.ERROR

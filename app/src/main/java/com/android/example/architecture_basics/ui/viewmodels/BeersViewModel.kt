@@ -36,9 +36,10 @@ class BeersViewModel @Inject constructor(private val repository: Repository) : V
     }
 
     /*
-    * Esta funcion trae las imagenes desde el repositorio.
+    * Esta funcion trae las beers desde el repositorio. Como parametro indicamos si quiere las
+    * favoritas o no.
     * */
-    private fun getBeers() {
+    fun getBeers( favourites:Boolean = false) {
 
         /*
         * Como la consulta de red es un proceso costoso en tiempos, esto se realiza en una
@@ -53,7 +54,7 @@ class BeersViewModel @Inject constructor(private val repository: Repository) : V
         viewModelScope.launch {
             _status.value = BeersApiStatus.LOADING
             try {
-                _beers.value = repository.fetchApiBeers()
+                _beers.value = repository.fetchBeers(favourites)
                 _status.value = BeersApiStatus.DONE
             } catch (e: Exception) {
                 _status.value = BeersApiStatus.ERROR

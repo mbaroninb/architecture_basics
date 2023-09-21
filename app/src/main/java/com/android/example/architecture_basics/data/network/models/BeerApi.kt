@@ -1,5 +1,6 @@
 package com.android.example.architecture_basics.data.network.models
 
+import com.android.example.architecture_basics.data.database.entity.BeerEntity
 import com.google.gson.annotations.SerializedName
 
 data class BeerApi(
@@ -14,3 +15,13 @@ data class BeerApi(
     @SerializedName("ibu") var ibu: Double? = null,
 )
 
+fun BeerEntity.toApi() = BeerApi(
+    id = id,
+    name = name,
+    tagline = tagline,
+    firstBrewed = firstBrewed,
+    description = description,
+    imageUrl = imageUrl,
+    abv = abv,
+    ibu = ibu
+)

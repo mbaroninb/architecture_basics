@@ -28,6 +28,9 @@ class BeersFragment : Fragment() {
 
     private var _binding: FragmentBeersBinding? = null
     private val binding get() = _binding!!
+
+    private var favourites = false
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -54,6 +57,10 @@ class BeersFragment : Fragment() {
             }
         }
 
+        binding.chkFav.setOnCheckedChangeListener { buttonView, isChecked ->
+            favourites = isChecked
+            viewModel.getBeers(isChecked)
+        }
 
         // Creo el adapter y se lo asigno al RecyclerView.
         val beersAdapter = BeersAdapter {
@@ -67,7 +74,7 @@ class BeersFragment : Fragment() {
             * para llamar a esta funcion  pasandole el elemento que se clickeo
             * */
             val action = BeersFragmentDirections
-                .actionBeersFragmentToDetailsBeerFragment(id = it.id!!)
+                .actionBeersFragmentToDetailsBeerFragment(id = it.id!!, isFavorite = favourites)
 
             view.findNavController().navigate(action)
         }
