@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_products"
+    app:startDestination="@id/beersFragment">
+
+
+
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.android.example.architecture_basics.ui.views.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
+    <fragment
+        android:id="@+id/beersFragment"
+        android:name="com.android.example.architecture_basics.ui.views.BeersFragment"
+        android:label="Beers"
+        tools:layout="@layout/fragment_beers">
+        <action
+            android:id="@+id/action_beersFragment_to_detailsBeerFragment"
+            app:destination="@id/detailsBeerFragment" />
+
+    </fragment>
+    <fragment
+        android:id="@+id/detailsBeerFragment"
+        android:name="com.android.example.architecture_basics.ui.views.DetailsBeerFragment"
+        android:label="fragment_details_beer"
+        tools:layout="@layout/fragment_details_beer" >
+        <argument
+            android:name="id"
+            app:argType="integer" />
+        <argument
+            android:name="isFavorite"
+            app:argType="boolean"
+            android:defaultValue="false" />
+    </fragment>
+</navigation>

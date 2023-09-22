@@ -11,5 +11,9 @@
     <string name="brewed">Brewed:</string>
     <string name="abv">ABV:</string>
     <string name="about">About:</string>
-    <string name="favourite">Favourite</string>
+    <string name="favourite">Favorito</string>
+    <string name="favourites">Favoritos</string>
+    <string name="products">Productos</string>
+    <string name="settings">Ajustes</string>
+
 </resources>

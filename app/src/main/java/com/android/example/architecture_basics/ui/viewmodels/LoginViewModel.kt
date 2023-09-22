@@ -7,6 +7,9 @@ import com.android.example.architecture_basics.helpers.Event
 
 class LoginViewModel : ViewModel() {
 
+
+
+
     /*
     * Ver aclaracion al final del archivo "Propiedad copia de seguridad"
     *
@@ -15,14 +18,15 @@ class LoginViewModel : ViewModel() {
     * valor dentro de livedata cambie.
     * (Ver documentacion de ViewModel & Livedata en README)
     * */
+    private val _loginSuccess = MutableLiveData(Event(false))
+    val loginSuccess: LiveData<Event<Boolean>>
+        get() = _loginSuccess
+
+
     private val _loginFailedMessage = MutableLiveData<Event<String>>()
     val loginFailedMessage: LiveData<Event<String>>
         get() = _loginFailedMessage
 
-
-    private val _loginSuccess = MutableLiveData(Event(false))
-    val loginSuccess: LiveData<Event<Boolean>>
-        get() = _loginSuccess
 
     /*
     * En esta funcion simple simulo un login.
