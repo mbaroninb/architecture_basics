@@ -1,13 +1,20 @@
 package com.android.example.architecture_basics.ui.viewmodels
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.android.example.architecture_basics.data.network.models.BeerApi
 import com.android.example.architecture_basics.domain.Repository
+import com.android.example.architecture_basics.domain.model.BeerDomain
+import com.android.example.architecture_basics.domain.model.toDomain
 import com.android.example.architecture_basics.helpers.BeersApiStatus
+import com.android.example.architecture_basics.helpers.Event
+import com.android.example.architecture_basics.helpers.GlobalConst
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -18,15 +25,19 @@ import javax.inject.Inject
 * Dentro de @Inject contructor() Hilt debe injectar el Repo. (Ver Repository)
 * */
 @HiltViewModel
-class BeersViewModel @Inject constructor(private val repository: Repository) : ViewModel(){
+class BeersViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
 
     //Estado de la peticion de red
     private val _status = MutableLiveData<BeersApiStatus>()
     val status: LiveData<BeersApiStatus> = _status
 
     //Listado de beers a mostrar en la UI.
-    private val _beers = MutableLiveData<List<BeerApi>>()
-    val beers: LiveData<List<BeerApi>> = _beers
+    private val _beers = MutableLiveData<List<BeerDomain>>()
+    val beers: LiveData<List<BeerDomain>> = _beers
+
+    private var _currentBeer: MutableLiveData<BeerDomain> = MutableLiveData<BeerDomain>()
+    val currentBeer: LiveData<BeerDomain>
+        get() = _currentBeer
 
     /*
     * Este bloque init se va a ejecutar cuando el viewmodel se instancie por primera vez.
@@ -39,7 +50,7 @@ class BeersViewModel @Inject constructor(private val repository: Repository) : V
     * Esta funcion trae las beers desde el repositorio. Como parametro indicamos si quiere las
     * favoritas o no.
     * */
-    fun getBeers( favourites:Boolean = false) {
+    fun getBeers(favourites: Boolean = false) {
 
         /*
         * Como la consulta de red es un proceso costoso en tiempos, esto se realiza en una
@@ -56,12 +67,64 @@ class BeersViewModel @Inject constructor(private val repository: Repository) : V
             try {
                 _beers.value = repository.fetchBeers(favourites)
                 _status.value = BeersApiStatus.DONE
+
             } catch (e: Exception) {
                 _status.value = BeersApiStatus.ERROR
                 _beers.value = listOf()
             }
         }
     }
+
+    fun updateCurrentBeer(beer: BeerDomain) {
+        _currentBeer.value = beer
+    }
+
+    //Mensaje de favorito
+    private val _favouriteMessage = MutableLiveData<Event<String>>()
+    val favouriteMessage: LiveData<Event<String>> = _favouriteMessage
+
+
+    fun saveFavourite() {
+        viewModelScope.launch {
+            try {
+                _favouriteMessage.value = if (repository.saveFavourite(currentBeer.value!!) >= 1L) {
+                    Event("Agregado a favoritos")
+                } else {
+                    Event("No se agrego a favoritos")
+                }
+
+
+            } catch (e: Exception) {
+                _favouriteMessage.value = Event("Falló -> ${e.message}")
+            }
+        }
+    }
+
+    fun removeFavourite() {
+        viewModelScope.launch {
+            try {
+                _favouriteMessage.value = if (repository.removeFavourite(currentBeer.value!!) > 0) {
+                    Event("Quitado de favoritos")
+                } else {
+                    Event("No se quito de favoritos")
+                }
+
+
+            } catch (e: Exception) {
+                _favouriteMessage.value = Event("Falló -> ${e.message}")
+            }
+        }
+    }
+
+    fun checkFavourite(id: Int) = liveData(Dispatchers.IO) {
+        try {
+            emit(repository.checkFavourite(id))
+        } catch (e: Exception) {
+            emit(false)
+            _favouriteMessage.value = Event("Falló -> ${e.message}")
+        }
+    }
+
 }
 
 /*

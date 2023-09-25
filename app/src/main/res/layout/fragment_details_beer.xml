@@ -27,6 +27,19 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <TextView
+        android:id="@+id/txt_no_data"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/select_an_item_to_view"
+        android:textAppearance="?attr/textAppearanceListItem"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:visibility="gone"
+        />
+
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/data_container"
@@ -35,14 +48,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
+        tools:visibility="visible"
+        >
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/GH70"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            app:layout_constraintGuide_percent="0.65" />
+            app:layout_constraintGuide_percent="0.60" />
 
         <ImageView
             android:id="@+id/iv_articulo"
@@ -93,18 +109,17 @@
                 app:layout_constraintTop_toBottomOf="@id/txt_name"
                 tools:text="Vibrant Hoppy Saison." />
 
-            <ImageButton
-                android:id="@+id/btn_fav"
+
+            <CheckBox
+                android:id="@+id/chkFav"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="8dp"
-                android:background="@drawable/sl_favourite_24dp"
-                android:contentDescription="@string/favourite"
+                android:button="@drawable/sl_favourite_24dp"
+                app:buttonTint="@android:color/holo_red_dark"
+                app:layout_constraintTop_toTopOf="@id/divider_iv_card"
                 app:layout_constraintBottom_toTopOf="@id/divider_name_description"
                 app:layout_constraintEnd_toEndOf="parent"
-
-                app:layout_constraintTop_toTopOf="@id/divider_iv_card"
-                tools:ignore="TouchTargetSizeCheck" />
+                />
 
 
             <com.google.android.material.divider.MaterialDivider

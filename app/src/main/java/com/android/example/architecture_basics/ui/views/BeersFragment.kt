@@ -6,12 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.slidingpanelayout.widget.SlidingPaneLayout
 import com.android.example.architecture_basics.R
 import com.android.example.architecture_basics.databinding.FragmentBeersBinding
 import com.android.example.architecture_basics.helpers.BeersApiStatus
+import com.android.example.architecture_basics.helpers.BeersListOnBackPressedCallback
 import com.android.example.architecture_basics.ui.adapters.BeersAdapter
 import com.android.example.architecture_basics.ui.viewmodels.BeersViewModel
 import com.android.example.architecture_basics.ui.viewmodels.LoginViewModel
@@ -24,20 +24,19 @@ class BeersFragment : Fragment() {
     * El viewModel se crea la primera vez que el sistema llame al método onCreate() del fragment.
     * Si se recrea la UI, va a recibir la misma instancia de viewModel creada anteriormente.
     *
-    * 'by viewModels()' es un delegado que internamente llama un ViewModelProvider pasandole el
-    * contexto del fragment.
-    * En java se veria asi:
-    *   BeersViewModel model = new ViewModelProvider(this).get(BeersViewModel.class);
+    * 'by activityViewModels()' es un delegado que internamente llama un ViewModelProvider pasandole el
+    * contexto de la actividad que hostea el fragment.
+    *
+    * Este viewmodel es compartido, ya que sera usado por el fragmento DetailsBeer.
     *
     * Ver documentacion en README.
     * */
-    private val viewModel by viewModels<BeersViewModel>()
+    private val viewModel by activityViewModels<BeersViewModel>()
 
     /*
     * Declaro un viewModel compartido para saber si debo mandar el usuario a loguear o no.
-    * Es compartido porque el alcance es a nivel de activity
     * */
-    private val userViewModel by activityViewModels<LoginViewModel>()
+    private val loginViewModel by activityViewModels<LoginViewModel>()
 
     /*
     * FragmentBeersBinding es una clase de vinculación autogenerada que contiene
@@ -50,6 +49,9 @@ class BeersFragment : Fragment() {
 
     //Variable para determinar si mostrar favoritos o no.
     private var favourites = false
+
+    //Callback para manejo custom de boton back
+    private lateinit var callback: BeersListOnBackPressedCallback
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -69,11 +71,11 @@ class BeersFragment : Fragment() {
         * que representa el ciclo de vida del fragmento para que deje de observar cuando el
         * ciclo de vida muera.
         *
-        * Como el tipo de datos alojado dentro del Livedata es un Event<String>
-        * (Ver clase Event dentro de helpers), lo primero que hago es verificar que no lo mostre
+        * Como el tipo de datos alojado dentro del Livedata es un Event<Boolean>
+        * (Ver clase Event dentro de helpers), lo primero que hago es verificar que no se disparó
         * antes, y luego verifico que el usuario este logueado
         * */
-        userViewModel.loginSuccess.observe(viewLifecycleOwner) {
+        loginViewModel.loginSuccess.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { loggedIn ->
                 if (!loggedIn) {
                     /*
@@ -86,28 +88,25 @@ class BeersFragment : Fragment() {
         }
 
         //Verifico si cambio el check de favoritos
-        binding.chkFav.setOnCheckedChangeListener { buttonView, isChecked ->
+        binding.chkFav.setOnCheckedChangeListener { _, isChecked ->
             favourites = isChecked
             viewModel.getBeers(isChecked)
         }
 
-        // Creo el adapter y se lo asigno al RecyclerView.
+        /*
+        * Creo el adapter y se lo asigno al RecyclerView.
+        * Beers Adapter toma un callback como parámetro: onItemClicked().
+        * Esta función se utilizará para controlar la navegación cuando se seleccione
+        * un elemento.
+        *
+        * En este bloque {} definimos que va a hacer la funcion.
+        * Por su parte en el adapter, en onCreateViewHolder(), configuramos un onClickListener()
+        * para llamar a esta funcion  pasandole el elemento que se clickeo.
+        * */
         val beersAdapter = BeersAdapter {
-            /*
-            * Beers Adapter toma un parámetro: onItemClicked().
-            * Esta función se utilizará para controlar la navegación cuando se seleccione
-            * un elemento.
-            *
-            * En este bloque {} definimos que va a hacer la funcion.
-            * Por su parte en el adapter, en onCreateViewHolder(), configuramos un onClickListener()
-            * para llamar a esta funcion  pasandole el elemento que se clickeo
-            * */
-            val action = BeersFragmentDirections
-                .actionBeersFragmentToDetailsBeerFragment(id = it.id!!, isFavorite = favourites)
-
-            view.findNavController().navigate(action)
+            viewModel.updateCurrentBeer(it)
+            binding.slidingPaneLayout.openPane()
         }
-
         binding.rvBeers.adapter = beersAdapter
 
         /*
@@ -126,23 +125,41 @@ class BeersFragment : Fragment() {
         * Esta propiedad status es un enumerable.
         * */
         viewModel.status.observe(viewLifecycleOwner) { status ->
-            when (status) {
-                BeersApiStatus.LOADING -> {
-                    binding.progressCircular.visibility = View.VISIBLE
-                }
-
-                BeersApiStatus.ERROR -> {
-                    binding.progressCircular.visibility = View.GONE
-                    binding.statusImage.visibility = View.VISIBLE
-                    binding.statusImage.setImageResource(R.drawable.ic_connection_error)
-                }
-
-                BeersApiStatus.DONE -> {
-                    binding.statusImage.visibility = View.GONE
-                    binding.progressCircular.visibility = View.GONE
+            status?.let{
+                when (status) {
+                    BeersApiStatus.LOADING -> {
+                        binding.progressCircular.visibility = View.VISIBLE
+                    }
+                    BeersApiStatus.ERROR -> {
+                        binding.progressCircular.visibility = View.GONE
+                        binding.statusImage.visibility = View.VISIBLE
+                        binding.statusImage.setImageResource(R.drawable.ic_connection_error)
+                    }
+                    BeersApiStatus.DONE -> {
+                        binding.statusImage.visibility = View.GONE
+                        binding.progressCircular.visibility = View.GONE
+                    }
                 }
             }
         }
+
+        //Obtengo el slidingPanelLayout y lo conecto con el sistema de back button.
+        val slidingPaneLayout = binding.slidingPaneLayout
+        callback = BeersListOnBackPressedCallback(slidingPaneLayout)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
+        //Bloqueo el Panel para que no pueda deslizarse
+        slidingPaneLayout.lockMode = SlidingPaneLayout.LOCK_MODE_LOCKED
+    }
+
+    override fun onResume() {
+        super.onResume()
+        callback.onResumedCallback()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        callback.onPausedCallback()
     }
 
     override fun onDestroyView() {
@@ -150,3 +167,5 @@ class BeersFragment : Fragment() {
         _binding = null
     }
 }
+
+

@@ -3,7 +3,7 @@ package com.android.example.architecture_basics.data.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.android.example.architecture_basics.data.network.models.BeerApi
+import com.android.example.architecture_basics.domain.model.BeerDomain
 
 @Entity(tableName = "beers")
 data class BeerEntity(
@@ -27,7 +27,7 @@ data class BeerEntity(
     var ibu: Double,
 )
 
-fun BeerApi.toEntity() = BeerEntity(
+fun BeerDomain.toEntity() = BeerEntity(
     id = id!!,
     name = name!!,
     tagline = tagline!!,
@@ -35,5 +35,5 @@ fun BeerApi.toEntity() = BeerEntity(
     description = description!!,
     imageUrl = imageUrl!!,
     abv = abv!!,
-    ibu = ibu!!
+    ibu = ibu!!,
 )

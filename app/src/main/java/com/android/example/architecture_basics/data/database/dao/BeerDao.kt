@@ -13,10 +13,12 @@ interface BeerDao {
     @Query("SELECT * FROM beers")
     suspend fun getAllBeers(): List<BeerEntity>
 
-    @Query("SELECT * FROM beers WHERE id = :id")
-    suspend fun getBeerById(id:Int): BeerEntity
+    @Query("SELECT EXISTS(SELECT * FROM beers WHERE id = :id)")
+    suspend fun checkFavouriteExists(id : Int) : Boolean
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertBeer(beer: BeerEntity): Long
 
+    @Delete
+    suspend fun deleteBeer(beer: BeerEntity): Int
 }
