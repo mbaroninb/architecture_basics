@@ -22,6 +22,10 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ksp {
+            arg("room.schemaLocation", "$projectDir/schemas")
+        }
     }
 
     buildTypes {
@@ -88,16 +92,11 @@ dependencies {
 
     //ROOM
     implementation ("androidx.room:room-runtime:2.4.2")
-    //kapt("androidx.room:room-compiler:2.4.2")
     ksp("androidx.room:room-compiler:2.4.2")
-
     implementation ("androidx.room:room-ktx:2.4.2")
 
+    //SlidingPanelLayout
+    implementation("androidx.slidingpanelayout:slidingpanelayout:1.2.0-beta01")
 }
 
-/*
-// Allow references to generated code
-kapt {
-    correctErrorTypes = true
-}
-*/
+

@@ -11,9 +11,15 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
+/*
+* Modulo para inyeccion de base de datos.
+*
+* Es muy similar a NetworkModule. Ver README.
+* */
 @Module
 @InstallIn(SingletonComponent::class)
 object DatabaseModule {
+
     @Singleton
     @Provides
     fun provideRoomInstance(@ApplicationContext context : Context) =

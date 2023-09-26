@@ -7,21 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.net.toUri
-import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.navArgs
+import androidx.fragment.app.activityViewModels
 import coil.load
 import com.android.example.architecture_basics.R
 import com.android.example.architecture_basics.databinding.FragmentDetailsBeerBinding
-import com.android.example.architecture_basics.helpers.BeersApiStatus
-import com.android.example.architecture_basics.ui.viewmodels.DetailsBeerViewModel
+import com.android.example.architecture_basics.ui.viewmodels.BeersViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailsBeerFragment : Fragment() {
 
-    val args: DetailsBeerFragmentArgs by navArgs()
+    private val viewModel by activityViewModels<BeersViewModel>()
 
-    private val viewModel by viewModels<DetailsBeerViewModel>()
 
     private var _binding: FragmentDetailsBeerBinding? = null
     private val binding get() = _binding!!
@@ -35,13 +32,15 @@ class DetailsBeerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        /*
+        * Observa el valor currentBeer del viewmodel compartido, y actuliza los datos cuando cambie.
+        * */
+        viewModel.currentBeer.observe(viewLifecycleOwner) {
+            it?.let {
+                binding.txtNoData.visibility = View.GONE
+                binding.dataContainer.visibility = View.VISIBLE
 
-        viewModel.getBeerById(args.id, args.isFavorite)
-
-
-        viewModel.beer.observe(viewLifecycleOwner){
-            it.let {
-                val imgUri = it.imageUrl!!.toUri().buildUpon().scheme("https").build()
+                val imgUri = it.imageUrl.toUri().buildUpon().scheme("https").build()
                 binding.ivArticulo.load(imgUri) {
                     placeholder(R.drawable.loading_animation)
                     error(R.drawable.ic_broken_image)
@@ -52,38 +51,29 @@ class DetailsBeerFragment : Fragment() {
                 binding.txtFirsBrewed.text = it.firstBrewed
                 binding.txtIbu.text = it.ibu.toString()
                 binding.txtAbv.text = "${it.abv}%"
+
+
+                viewModel.checkFavourite(it.id).observe(viewLifecycleOwner) { result ->
+                    binding.chkFav.isChecked = result
+                }
+
             }
         }
 
-        viewModel.status.observe(viewLifecycleOwner) { status ->
-            when (status) {
-                BeersApiStatus.LOADING -> {
-                    binding.progressCircular.visibility = View.VISIBLE
-                }
-
-                BeersApiStatus.ERROR -> {
-                    binding.progressCircular.visibility = View.GONE
-                    binding.dataContainer.visibility = View.GONE
-                    binding.statusImage.visibility = View.VISIBLE
-                    binding.statusImage.setImageResource(R.drawable.ic_connection_error)
-                }
-
-                BeersApiStatus.DONE -> {
-                    binding.statusImage.visibility = View.GONE
-                    binding.progressCircular.visibility = View.GONE
-                }
+        binding.chkFav.setOnCheckedChangeListener { checkBox, isChecked ->
+            if (checkBox.isPressed && isChecked) {
+                viewModel.saveFavourite()
+            } else if (checkBox.isPressed && !isChecked) {
+                viewModel.removeFavourite()
             }
-        }
-
-        binding.btnFav.setOnClickListener{
-            viewModel.saveFavourite()
         }
 
         viewModel.favouriteMessage.observe(viewLifecycleOwner) {
-            it.getContentIfNotHandled()?.let { message ->
-                Toast.makeText(requireContext(),message,Toast.LENGTH_SHORT).show()
+            it.getContentIfNotHandled()?.let { favMessage ->
+                Toast.makeText(requireContext(), favMessage, Toast.LENGTH_SHORT).show()
             }
         }
     }
 
 }
+
