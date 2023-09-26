@@ -11,7 +11,10 @@
         android:id="@+id/loginFragment"
         android:name="com.android.example.architecture_basics.ui.views.LoginFragment"
         android:label="fragment_login"
-        tools:layout="@layout/fragment_login" />
+        tools:layout="@layout/fragment_login"
+
+        />
+
     <fragment
         android:id="@+id/beersFragment"
         android:name="com.android.example.architecture_basics.ui.views.BeersFragment"

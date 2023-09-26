@@ -32,7 +32,6 @@ class DetailsBeerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         /*
         * Observa el valor currentBeer del viewmodel compartido, y actuliza los datos cuando cambie.
         * */

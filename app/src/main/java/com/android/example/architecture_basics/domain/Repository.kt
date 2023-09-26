@@ -29,9 +29,6 @@ class Repository @Inject constructor(
         }
     }
 
-
-
-
     /*
     * En esta funcion recibo por parametros un objeto BeerDomain y lo guardo en la base de datos
     * como favoritos.

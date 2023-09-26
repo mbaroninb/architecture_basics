@@ -53,17 +53,18 @@ class BeersFragment : Fragment() {
     //Callback para manejo custom de boton back
     private lateinit var callback: BeersListOnBackPressedCallback
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+        //Inflo la vista y retorno la raiz de esa vista (xml)
         _binding = FragmentBeersBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         /*
         * Declaro un observador a la propiedad loginSuccess del viewModel.(Ver LoginViewModel)
         *

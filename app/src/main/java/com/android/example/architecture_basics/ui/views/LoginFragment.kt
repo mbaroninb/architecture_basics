@@ -1,16 +1,19 @@
 package com.android.example.architecture_basics.ui.views
 
+import android.app.AlertDialog
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.fragment.findNavController
 import com.android.example.architecture_basics.databinding.FragmentLoginBinding
 import com.android.example.architecture_basics.ui.viewmodels.LoginViewModel
+
 
 class LoginFragment : Fragment() {
 
@@ -25,8 +28,30 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var savedStateHandle: SavedStateHandle
+
     companion object {
         const val LOGIN_SUCCESSFUL: String = "LOGIN_SUCCESSFUL"
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        val callback: OnBackPressedCallback =
+            object : OnBackPressedCallback(true /* enabled by default */) {
+                override fun handleOnBackPressed() {
+                    val alertDialogBuilder = AlertDialog.Builder(requireContext())
+                    alertDialogBuilder.setTitle("Advertencia")
+                        .setMessage("Debe iniciar sesion para continuar. ¿Desea salir?")
+                        .setPositiveButton("Si") { _, _ ->
+                            requireActivity().finish()
+                        }
+                    alertDialogBuilder.setNegativeButton("No") { _, _ -> }
+                    alertDialogBuilder.show()
+
+                }
+            }
+        requireActivity().onBackPressedDispatcher.addCallback(this, callback)
+
     }
 
 
@@ -34,7 +59,6 @@ class LoginFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        //Inflo la vista y retorno la raiz de esa vista (xml)
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
@@ -43,11 +67,12 @@ class LoginFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         /*
-        * Se obtiene el estado de la pila de navegacion anterior y se almacena un informacion en un
-        * savedStateHandler para que pueda ser recuperada posteriormente cuando se vuelva en la pila
+        * Se obtiene el estado de la pila de navegacion anterior y se almacena informacion del login
+        * en un savedStateHandler para que pueda ser recuperada posteriormente cuando se vuelva en
+        * la pila
         * */
-        savedStateHandle = findNavController().previousBackStackEntry!!.savedStateHandle
-        savedStateHandle.set(LOGIN_SUCCESSFUL, false)
+        //savedStateHandle = findNavController().previousBackStackEntry!!.savedStateHandle
+        //savedStateHandle.set(LOGIN_SUCCESSFUL, false)
 
 
         /*
@@ -63,20 +88,20 @@ class LoginFragment : Fragment() {
 
 
         /*
-        * Cuando el login sea correcto se ejecuta el contenido en la funcion lambda let().
+        * Cuando el login sea correcto se ejecuta el contenido en la funcion lambda let{}.
         * */
         viewModel.loginSuccess.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { loggedIn ->
                 if (loggedIn) {
-                    savedStateHandle.set(LOGIN_SUCCESSFUL, true)
+                    //savedStateHandle.set(LOGIN_SUCCESSFUL, true)
                     findNavController().popBackStack()
                 }
             }
         }
 
-        viewModel.loginFailedMessage.observe(viewLifecycleOwner){
+        viewModel.loginFailedMessage.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let {
-                Toast.makeText(requireContext(),"Fallo el login",Toast.LENGTH_LONG).show()
+                Toast.makeText(requireContext(), "Fallo el login", Toast.LENGTH_LONG).show()
             }
         }
 

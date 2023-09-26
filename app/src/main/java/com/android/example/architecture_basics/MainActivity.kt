@@ -48,11 +48,15 @@ class MainActivity : AppCompatActivity() {
         setupNavigationRailMenu(navController)
         setupBottomNavMenu(navController)
 
+        /*
+        * Listener que escucha cuando se inicia el Login para esconder la barra de tareas.
+        * */
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when(destination.id){
                 R.id.loginFragment -> {
                     binding.bottomNavigationBar?.visibility = View.GONE
                     binding.navigationRailBar?.visibility = View.GONE
+
                 }
                 else -> {
                     binding.bottomNavigationBar?.visibility = View.VISIBLE

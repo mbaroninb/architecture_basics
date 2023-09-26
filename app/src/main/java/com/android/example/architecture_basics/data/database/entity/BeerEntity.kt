@@ -5,6 +5,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.android.example.architecture_basics.domain.model.BeerDomain
 
+/*
+* Modelo de datos para entidad "beers" en base de datos.
+* */
 @Entity(tableName = "beers")
 data class BeerEntity(
 
