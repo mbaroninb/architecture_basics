@@ -1,18 +1,14 @@
 package com.android.example.architecture_basics.ui.viewmodels
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.android.example.architecture_basics.data.network.models.BeerApi
 import com.android.example.architecture_basics.domain.Repository
 import com.android.example.architecture_basics.domain.model.BeerDomain
-import com.android.example.architecture_basics.domain.model.toDomain
 import com.android.example.architecture_basics.helpers.BeersApiStatus
 import com.android.example.architecture_basics.helpers.Event
-import com.android.example.architecture_basics.helpers.GlobalConst
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -39,12 +35,6 @@ class BeersViewModel @Inject constructor(private val repository: Repository) : V
     val currentBeer: LiveData<BeerDomain>
         get() = _currentBeer
 
-    /*
-    * Este bloque init se va a ejecutar cuando el viewmodel se instancie por primera vez.
-    * */
-    init {
-        getBeers()
-    }
 
     /*
     * Esta funcion trae las beers desde el repositorio. Como parametro indicamos si quiere las

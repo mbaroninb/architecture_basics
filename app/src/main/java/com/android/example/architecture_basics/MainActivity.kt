@@ -1,8 +1,8 @@
 package com.android.example.architecture_basics
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+
         /*
         * Creo una variable navHostFragment que va a contener el contenedor de fragmentos y luego
         * le asigno este controlador de fragmentos a el navController.
@@ -42,8 +43,9 @@ class MainActivity : AppCompatActivity() {
         *
         * Ver Navigation Components en README.
         * */
-        val navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController= navHostFragment.navController
+        val navHostFragment =
+            supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
 
         setupNavigationRailMenu(navController)
         setupBottomNavMenu(navController)
@@ -52,12 +54,13 @@ class MainActivity : AppCompatActivity() {
         * Listener que escucha cuando se inicia el Login para esconder la barra de tareas.
         * */
         navController.addOnDestinationChangedListener { _, destination, _ ->
-            when(destination.id){
+            when (destination.id) {
                 R.id.loginFragment -> {
                     binding.bottomNavigationBar?.visibility = View.GONE
                     binding.navigationRailBar?.visibility = View.GONE
 
                 }
+
                 else -> {
                     binding.bottomNavigationBar?.visibility = View.VISIBLE
                     binding.navigationRailBar?.visibility = View.VISIBLE
@@ -70,14 +73,13 @@ class MainActivity : AppCompatActivity() {
     * Seteo el NavigationRailMenu si este existe.
     * Esto es asi porque tengo dos layouts para MainActivity, cada uno con su barra correspondiente.
     * */
-
-    private fun setupNavigationRailMenu(navController: NavController){
+    private fun setupNavigationRailMenu(navController: NavController) {
         val sideNavView = binding.navigationRailBar
         sideNavView?.setupWithNavController(navController)
     }
 
     //Seteo el BottomNavMenu si este existe.
-    private fun setupBottomNavMenu(navController: NavController){
+    private fun setupBottomNavMenu(navController: NavController) {
         val bottomNav = binding.bottomNavigationBar
         bottomNav?.setupWithNavController(navController)
     }

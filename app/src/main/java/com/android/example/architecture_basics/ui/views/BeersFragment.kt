@@ -1,10 +1,10 @@
 package com.android.example.architecture_basics.ui.views
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.slidingpanelayout.widget.SlidingPaneLayout
@@ -34,7 +34,8 @@ class BeersFragment : Fragment() {
     private val viewModel by activityViewModels<BeersViewModel>()
 
     /*
-    * Declaro un viewModel compartido para saber si debo mandar el usuario a loguear o no.
+    * Declaro un viewModel compartido con LoginFragment para saber si debo mandar el usuario
+    * a loguear o no.
     * */
     private val loginViewModel by activityViewModels<LoginViewModel>()
 
@@ -54,6 +55,27 @@ class BeersFragment : Fragment() {
     private lateinit var callback: BeersListOnBackPressedCallback
 
 
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        /*
+        * Aqui observamos el valor LOGIN_SUCCESSFUL almacenado en SavedStateHandle en LoginFragment.
+        * Este valor lo obtenemos del BackStack.
+        * Si el valor es true, obtenemos los datos del servidor, de lo contrario se podrá finalizar
+        * la actividad -> requireActivity().finish()
+        * */
+        val currentBackStackEntry = findNavController().currentBackStackEntry!!
+        val savedStateHandle = currentBackStackEntry.savedStateHandle
+        savedStateHandle.getLiveData<Boolean>(LoginFragment.LOGIN_SUCCESSFUL)
+            .observe(currentBackStackEntry){ success ->
+                if (success) {
+                    viewModel.getBeers()
+                }else{
+                    requireActivity().finish()
+                }
+            }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -65,16 +87,9 @@ class BeersFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
         /*
-        * Declaro un observador a la propiedad loginSuccess del viewModel.(Ver LoginViewModel)
-        *
-        * Cuando llamo a la funcion observe le paso como parametro viewLifecycleOwner
-        * que representa el ciclo de vida del fragmento para que deje de observar cuando el
-        * ciclo de vida muera.
-        *
-        * Como el tipo de datos alojado dentro del Livedata es un Event<Boolean>
-        * (Ver clase Event dentro de helpers), lo primero que hago es verificar que no se disparó
-        * antes, y luego verifico que el usuario este logueado
+        * Si los datos del login son false, se redirecciona al LoginFragment
         * */
         loginViewModel.loginSuccess.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { loggedIn ->

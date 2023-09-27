@@ -31,12 +31,12 @@ data class BeerEntity(
 )
 
 fun BeerDomain.toEntity() = BeerEntity(
-    id = id!!,
-    name = name!!,
-    tagline = tagline!!,
-    firstBrewed = firstBrewed!!,
-    description = description!!,
-    imageUrl = imageUrl!!,
-    abv = abv!!,
-    ibu = ibu!!,
+    id = id,
+    name = name,
+    tagline = tagline,
+    firstBrewed = firstBrewed,
+    description = description,
+    imageUrl = imageUrl,
+    abv = abv,
+    ibu = ibu,
 )
