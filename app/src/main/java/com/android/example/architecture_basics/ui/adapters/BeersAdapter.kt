@@ -13,7 +13,6 @@ import com.android.example.architecture_basics.databinding.RowBeerItemBinding
 import com.android.example.architecture_basics.domain.model.BeerDomain
 
 class BeersAdapter(
-    //private val context: Context,
     private val onItemClicked: (BeerDomain) -> Unit
 ): ListAdapter<BeerDomain, BeersAdapter.BeerViewHolder>(DiffCallback) {
 
@@ -29,7 +28,8 @@ class BeersAdapter(
             binding.txtTag.text = beer.tagline
             binding.txtFirsBrewed.text = beer.firstBrewed
             binding.txtIbu.text = beer.ibu.toString()
-            binding.txtAbv.text = "${beer.abv}"//context.getString(R.string.percentage_number,beer.abv.toString())
+            binding.txtAbv.text = "${beer.abv}"
+
 
         }
     }

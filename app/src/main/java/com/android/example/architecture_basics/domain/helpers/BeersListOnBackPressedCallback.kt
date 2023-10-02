@@ -1,4 +1,4 @@
-package com.android.example.architecture_basics.helpers
+package com.android.example.architecture_basics.domain.helpers
 
 import android.view.View
 import androidx.activity.OnBackPressedCallback

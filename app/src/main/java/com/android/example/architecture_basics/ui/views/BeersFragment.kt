@@ -10,8 +10,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.slidingpanelayout.widget.SlidingPaneLayout
 import com.android.example.architecture_basics.R
 import com.android.example.architecture_basics.databinding.FragmentBeersBinding
-import com.android.example.architecture_basics.helpers.BeersApiStatus
-import com.android.example.architecture_basics.helpers.BeersListOnBackPressedCallback
+import com.android.example.architecture_basics.domain.helpers.BeersApiStatus
+import com.android.example.architecture_basics.domain.helpers.BeersListOnBackPressedCallback
 import com.android.example.architecture_basics.ui.adapters.BeersAdapter
 import com.android.example.architecture_basics.ui.viewmodels.BeersViewModel
 import com.android.example.architecture_basics.ui.viewmodels.LoginViewModel

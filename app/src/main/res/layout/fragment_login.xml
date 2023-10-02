@@ -15,18 +15,21 @@
         app:layout_constraintGuide_percent="0.45" />
 
 
-    <ImageView
-        android:id="@+id/img_beer"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/beer_svgrepo_com"
-        app:layout_constraintBottom_toTopOf="@id/GH40"
+
+
+
+    <com.android.example.architecture_basics.ui.utils.HorizontalCarouselRecyclerView
+        android:id="@+id/item_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="center_vertical"
+        android:clipToPadding="false"
+        android:overScrollMode="never"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintVertical_chainStyle="packed"
-        tools:ignore="ContentDescription" />
-
-
+        app:layout_constraintBottom_toBottomOf="@id/GH40"
+        />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txt_input_user"

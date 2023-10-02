@@ -3,7 +3,7 @@ package com.android.example.architecture_basics.di
 import android.content.Context
 import androidx.room.Room
 import com.android.example.architecture_basics.data.database.BeersDatabase
-import com.android.example.architecture_basics.helpers.GlobalConst
+import com.android.example.architecture_basics.domain.helpers.GlobalConst
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -65,9 +65,6 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:$nav_version")
     implementation("androidx.navigation:navigation-ui-ktx:$nav_version")
 
-    //Material Desing
-    implementation ("com.google.android.material:material:1.8.0")
-
     //ViewModel & Livedata
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0")
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.4.0")
@@ -76,6 +73,8 @@ dependencies {
     implementation("com.squareup.retrofit2:retrofit:2.6.0")
     implementation("com.google.code.gson:gson:2.8.5")
     implementation("com.squareup.retrofit2:converter-gson:2.5.0")
+    implementation("com.squareup.okhttp3:logging-interceptor:3.12.0")
+
 
     //Corrutinas
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
@@ -97,6 +96,9 @@ dependencies {
 
     //SlidingPanelLayout
     implementation("androidx.slidingpanelayout:slidingpanelayout:1.2.0-beta01")
+
+    //Biometrics
+    implementation ("androidx.biometric:biometric-ktx:1.2.0-alpha05")
 }
 
 

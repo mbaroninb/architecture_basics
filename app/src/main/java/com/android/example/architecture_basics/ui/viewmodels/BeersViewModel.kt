@@ -5,10 +5,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
-import com.android.example.architecture_basics.domain.Repository
+import com.android.example.architecture_basics.data.repository.Repository
 import com.android.example.architecture_basics.domain.model.BeerDomain
-import com.android.example.architecture_basics.helpers.BeersApiStatus
-import com.android.example.architecture_basics.helpers.Event
+import com.android.example.architecture_basics.domain.helpers.BeersApiStatus
+import com.android.example.architecture_basics.domain.helpers.Event
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

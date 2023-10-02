@@ -3,7 +3,7 @@ package com.android.example.architecture_basics.ui.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.android.example.architecture_basics.helpers.Event
+import com.android.example.architecture_basics.domain.helpers.Event
 
 class LoginViewModel : ViewModel() {
 

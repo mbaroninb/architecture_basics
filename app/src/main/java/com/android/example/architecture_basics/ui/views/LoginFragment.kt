@@ -5,16 +5,27 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.annotation.DrawableRes
+import androidx.biometric.BiometricManager
+import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
+import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
+import androidx.biometric.BiometricPrompt
+import androidx.core.content.ContextCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.android.example.architecture_basics.R
 import com.android.example.architecture_basics.databinding.FragmentLoginBinding
+import com.android.example.architecture_basics.ui.adapters.LoginAdapter
+import com.android.example.architecture_basics.ui.utils.CenterZoomLayoutManager
 import com.android.example.architecture_basics.ui.viewmodels.LoginViewModel
+import java.util.concurrent.Executor
 
 
 class LoginFragment : Fragment() {
-
 
     /*
     * Al igual que en el BeersFragment instancio el viewmodel correspondiente
@@ -25,14 +36,11 @@ class LoginFragment : Fragment() {
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
 
-    /*
-    *
-    * */
     private lateinit var savedStateHandle: SavedStateHandle
+
     companion object {
         const val LOGIN_SUCCESSFUL: String = "LOGIN_SUCCESSFUL"
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -67,8 +75,7 @@ class LoginFragment : Fragment() {
         viewModel.loginSuccess.observe(viewLifecycleOwner) {
             it.getContentIfNotHandled()?.let { loggedIn ->
                 if (loggedIn) {
-                    savedStateHandle.set(LOGIN_SUCCESSFUL, true)
-                    findNavController().popBackStack()
+                    loginSuccesful()
                 }
             }
         }
@@ -80,7 +87,27 @@ class LoginFragment : Fragment() {
             }
         }
 
+
+        /////////////////////////////////////////
+
+        val adapter = LoginAdapter { position: Int ->
+            binding.itemList.smoothScrollToPosition(position)
+        }
+        binding.itemList.initialize(adapter)
+        val list = (0..9).map { Item("Cars", R.drawable.baseline_fingerprint_24) }
+        adapter.setItems(list)
+
     }
 
 
+    private fun loginSuccesful() {
+        savedStateHandle.set(LOGIN_SUCCESSFUL, true)
+        findNavController().popBackStack()
+    }
 }
+
+
+data class Item(
+    val title: String,
+    @DrawableRes val icon: Int
+)

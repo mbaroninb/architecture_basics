@@ -1,4 +1,4 @@
-package com.android.example.architecture_basics.domain
+package com.android.example.architecture_basics.data.repository
 
 import com.android.example.architecture_basics.data.database.dao.BeerDao
 import com.android.example.architecture_basics.data.database.entity.toEntity
@@ -27,7 +27,9 @@ class Repository @Inject constructor(
             // Obtengo del servicio web. punkApi (retrofit)
             apiService.getBeers().map { it.toDomain() }
         }
+
     }
+
 
     /*
     * En esta funcion recibo por parametros un objeto BeerDomain y lo guardo en la base de datos
