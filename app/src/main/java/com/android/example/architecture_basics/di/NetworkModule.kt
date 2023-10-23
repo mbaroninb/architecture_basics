@@ -5,6 +5,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -29,6 +31,18 @@ object NetworkModule {
 
     private const val BASE_URL = "https://api.punkapi.com/v2/"
 
+
+
+    @Provides
+    @Singleton
+    fun provideOkHttpClient():OkHttpClient{
+        return OkHttpClient
+            .Builder()
+            .addInterceptor(HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.HEADERS))
+            .build()
+    }
+
+
     /*
     * @Provide indica a Hilt cómo proporcionar una instancia mediante una función dentro del módulo,
     * En este caso de tipo Retrofit.
@@ -38,9 +52,10 @@ object NetworkModule {
     * */
     @Singleton
     @Provides
-    fun provideRetrofit(): Retrofit = Retrofit.Builder()
+    fun provideRetrofit(client: OkHttpClient): Retrofit = Retrofit.Builder()
         .addConverterFactory(GsonConverterFactory.create())
         .baseUrl(BASE_URL)
+        .client(client)
         .build()
 
     /*

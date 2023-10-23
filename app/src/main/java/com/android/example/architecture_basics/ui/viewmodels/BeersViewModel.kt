@@ -9,6 +9,7 @@ import com.android.example.architecture_basics.data.repository.Repository
 import com.android.example.architecture_basics.domain.model.BeerDomain
 import com.android.example.architecture_basics.domain.helpers.BeersApiStatus
 import com.android.example.architecture_basics.domain.helpers.Event
+import com.android.example.architecture_basics.domain.helpers.Util
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ import javax.inject.Inject
 * Dentro de @Inject contructor() Hilt debe injectar el Repo. (Ver Repository)
 * */
 @HiltViewModel
-class BeersViewModel @Inject constructor(private val repository: Repository) : ViewModel() {
+class BeersViewModel @Inject constructor(private val repository: Repository, private val util: Util) : ViewModel() {
 
     //Estado de la peticion de red
     private val _status = MutableLiveData<BeersApiStatus>()
@@ -61,6 +62,7 @@ class BeersViewModel @Inject constructor(private val repository: Repository) : V
             } catch (e: Exception) {
                 _status.value = BeersApiStatus.ERROR
                 _beers.value = listOf()
+                util.guardaLog(" BeersViewModel getBeers(): ${e.message}")
             }
         }
     }
@@ -86,6 +88,8 @@ class BeersViewModel @Inject constructor(private val repository: Repository) : V
 
             } catch (e: Exception) {
                 _favouriteMessage.value = Event("Falló -> ${e.message}")
+                util.guardaLog(" BeersViewModel saveFavourite(): ${e.message}")
+
             }
         }
     }
@@ -102,6 +106,7 @@ class BeersViewModel @Inject constructor(private val repository: Repository) : V
 
             } catch (e: Exception) {
                 _favouriteMessage.value = Event("Falló -> ${e.message}")
+                util.guardaLog(" BeersViewModel removeFavourite(): ${e.message}")
             }
         }
     }
@@ -112,6 +117,8 @@ class BeersViewModel @Inject constructor(private val repository: Repository) : V
         } catch (e: Exception) {
             emit(false)
             _favouriteMessage.value = Event("Falló -> ${e.message}")
+            util.guardaLog(" BeersViewModel checkFavourite(): ${e.message}")
+
         }
     }
 

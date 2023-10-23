@@ -5,24 +5,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.annotation.DrawableRes
-import androidx.biometric.BiometricManager
-import androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG
-import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
-import androidx.biometric.BiometricPrompt
-import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.SavedStateHandle
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.LinearLayoutManager
-import com.android.example.architecture_basics.R
 import com.android.example.architecture_basics.databinding.FragmentLoginBinding
-import com.android.example.architecture_basics.ui.adapters.LoginAdapter
-import com.android.example.architecture_basics.ui.utils.CenterZoomLayoutManager
 import com.android.example.architecture_basics.ui.viewmodels.LoginViewModel
-import java.util.concurrent.Executor
 
 
 class LoginFragment : Fragment() {
@@ -37,7 +25,6 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
 
     private lateinit var savedStateHandle: SavedStateHandle
-
     companion object {
         const val LOGIN_SUCCESSFUL: String = "LOGIN_SUCCESSFUL"
     }
@@ -59,7 +46,7 @@ class LoginFragment : Fragment() {
         * la pila de navegacion.
         * */
         savedStateHandle = findNavController().previousBackStackEntry!!.savedStateHandle
-        savedStateHandle.set(LOGIN_SUCCESSFUL, false)
+        savedStateHandle[LOGIN_SUCCESSFUL] = false
 
         /*
         * En el metododo setOnClickListener del boton de login, obtengo de la UI los datos
@@ -87,27 +74,13 @@ class LoginFragment : Fragment() {
             }
         }
 
-
-        /////////////////////////////////////////
-
-        val adapter = LoginAdapter { position: Int ->
-            binding.itemList.smoothScrollToPosition(position)
-        }
-        binding.itemList.initialize(adapter)
-        val list = (0..9).map { Item("Cars", R.drawable.baseline_fingerprint_24) }
-        adapter.setItems(list)
-
     }
 
 
     private fun loginSuccesful() {
-        savedStateHandle.set(LOGIN_SUCCESSFUL, true)
+        savedStateHandle[LOGIN_SUCCESSFUL] = true
         findNavController().popBackStack()
     }
 }
 
 
-data class Item(
-    val title: String,
-    @DrawableRes val icon: Int
-)

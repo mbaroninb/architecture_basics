@@ -12,11 +12,11 @@ import javax.inject.Inject
 * */
 class Repository @Inject constructor(
     private val beerDao: BeerDao,
-    private val apiService: BeersApiService
+    private val apiService: BeersApiService,
 ) {
 
     //Busca datos del servicio web o de la base de datos.
-    suspend fun fetchBeers( isFavourite: Boolean): List<BeerDomain> {
+    suspend fun fetchBeers(isFavourite: Boolean): List<BeerDomain> {
         return if (isFavourite) {
             /*
             * Obtengo las Beers desde la base de datos, pero antes de enviarlas las mapeo a
@@ -49,9 +49,11 @@ class Repository @Inject constructor(
         return beerDao.deleteBeer(beer.toEntity())
     }
 
-    suspend fun checkFavourite(id: Int): Boolean{
+    suspend fun checkFavourite(id: Int): Boolean {
         return beerDao.checkFavouriteExists(id)
     }
+
+
 
 
 }

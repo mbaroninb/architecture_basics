@@ -7,43 +7,23 @@
     tools:context=".ui.views.LoginFragment"
     android:background="?attr/colorPrimaryContainer">
 
-    <androidx.constraintlayout.widget.Guideline
-        android:id="@+id/GH40"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.45" />
 
 
 
-
-
-    <com.android.example.architecture_basics.ui.utils.HorizontalCarouselRecyclerView
-        android:id="@+id/item_list"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_gravity="center_vertical"
-        android:clipToPadding="false"
-        android:overScrollMode="never"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/GH40"
-        />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/txt_input_user"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:hint="@string/usuario"
-        app:layout_constraintTop_toBottomOf="@id/GH40"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:paddingHorizontal="40dp"
         app:layout_constraintBottom_toTopOf="@id/text_input_password"
         android:paddingVertical="10dp"
         app:layout_constraintVertical_chainStyle="packed"
-        app:layout_constraintVertical_bias="0.1"
+        app:layout_constraintVertical_bias="0.45"
         >
 
         <com.google.android.material.textfield.TextInputEditText

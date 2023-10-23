@@ -58,7 +58,6 @@ class MainActivity : AppCompatActivity() {
                 R.id.loginFragment -> {
                     binding.bottomNavigationBar?.visibility = View.GONE
                     binding.navigationRailBar?.visibility = View.GONE
-
                 }
 
                 else -> {

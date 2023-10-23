@@ -74,6 +74,8 @@ class BeersFragment : Fragment() {
                     requireActivity().finish()
                 }
             }
+
+
     }
 
     override fun onCreateView(

@@ -40,12 +40,15 @@ class LoginViewModel : ViewModel() {
         val usuario = "admin"
         val password = "1234"
 
-        if (usuario == user && password == pass) {
+        _loginSuccess.value = Event(true)
+
+
+       /* if (usuario == user && password == pass) {
             _loginSuccess.value = Event(true)
         } else {
             _loginSuccess.value = Event(false)
             _loginFailedMessage.value = Event("Falló el login")
-        }
+        }*/
 
     }
 

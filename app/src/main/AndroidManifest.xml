@@ -5,6 +5,9 @@
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.USE_BIOMETRIC" />
     <uses-permission android:name="android.permission.USE_FACE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="32" />
+
 
     <application
         android:name=".BaseApplication"
@@ -28,6 +31,17 @@
             </intent-filter>
         </activity>
 
+        <!-- Este provider es el FileProvider utilizado para exportar la base de datos. -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.android.example.architecture_basics"
+            android:exported="false"
+            android:enabled="true"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/provider_paths" />
+        </provider>
 
     </application>
 
