@@ -10,20 +10,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import com.android.example.architecture_basics.databinding.FragmentSettingsBinding
-import com.android.example.architecture_basics.domain.helpers.Util
+import com.android.example.architecture_basics.ui.viewmodels.SettingsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
 
 
 @AndroidEntryPoint
 class SettingsFragment : Fragment() {
 
+    private val viewModel by viewModels<SettingsViewModel>()
+
     private var _binding: FragmentSettingsBinding? = null
     private val binding get() = _binding!!
-
-    @Inject
-    lateinit var util: Util
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -39,10 +38,16 @@ class SettingsFragment : Fragment() {
 
         binding.btnExportDb.setOnClickListener {
 
-            //util.exportDatabaseFile()
-            sendEmail(util.backupDatabase())
+            viewModel.exportLogAndDB()
             Toast.makeText(requireContext(), "Exportar db aqui!", Toast.LENGTH_SHORT).show()
         }
+
+        viewModel.zipUri.observe(viewLifecycleOwner){
+            it.getContentIfNotHandled()?.let {zipUri->
+                sendEmail(zipUri)
+            }
+        }
+
     }
 
     private fun sendEmail(attachment: Uri) {

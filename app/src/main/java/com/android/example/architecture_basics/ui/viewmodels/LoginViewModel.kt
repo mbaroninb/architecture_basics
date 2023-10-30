@@ -7,9 +7,6 @@ import com.android.example.architecture_basics.domain.helpers.Event
 
 class LoginViewModel : ViewModel() {
 
-
-
-
     /*
     * Ver aclaracion al final del archivo "Propiedad copia de seguridad"
     *

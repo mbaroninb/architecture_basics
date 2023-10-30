@@ -8,12 +8,13 @@ object GlobalConst {
 
     /////////////////////////
 
-    const val DB_BACKUP_FILENAME = "beers.db"
+    const val DB_BACKUP_FILENAME = "beers.sqlite"
     const val DB_BACKUP_FILENAME_ZIP = "beersdb.zip"
-    const val DB_BACKUP_DIRECTORY = "databases_temp"
 
-    const val LOG_BACKUP_DIRECTORY = "logs_temp"
+    const val DB_BACKUP_DIRECTORY = "database_temp"
+
+    const val LOG_BACKUP_DIRECTORY = "logs_files"
     const val LOG_BACKUP_FILENAME = "pos"
-    const val ARCHIVO_LOGERROR = "_log.txt"
+    const val LOG_EXTENSION = "_log.txt"
     /////////////////////////
 }
